@@ -11,13 +11,12 @@ book:
   subtitle: "Un caso para Cisjordania"
   author: 
     - name: "Julian Ibarguen Onsurbe"
-      affiliations:
-        - id: uab
-          name: "Universidad Autónoma de Barcelona"
+      affiliation: "Universidad Autónoma de Barcelona"
     - name: "Tutor: Pedro López-Roldan"
-      affiliations:
-        - ref: uab
-  date: 2022-12-31
+      affiliation: "Universidad Autónoma de Barcelona"
+    - name: "Universidad Autónoma de Barcelona"
+    - name: "Número de palabras: 20.000"
+  date: 31/12/2022
   date-format: "MMM D, YYYY"
   chapters:
     - index.qmd
@@ -26,8 +25,7 @@ book:
     - c3_metodo.qmd
     - c4_resultado.qmd
     - c5_conclusion.qmd
-    - c6_referencias.qmd
-    - c7_annexo.qmd
+    - c9_referencias.qmd
 bibliography: references.bib
 format:
   html:
