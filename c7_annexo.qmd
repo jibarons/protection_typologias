@@ -1,0 +1,3 @@
+# Anexo A
+
+El documento de esta tesis ha sido creado con Quarto, y todos los análisis se han realizado con R versión 4.2.2. Esto asegura la total reproducibilidad del documento, y de todos sus análisis. Los ficheros necesarios para reproducir el documento se encuentran en este [repositorio en GitHub](https://github.com/jibarons/protection_typologies). Los archivos de datos han sido excluidos para respetar los derechos de autor y de protección de datos. Si es de interés se pueden solicitar contactando al autor de este trabajo a través de GitHub.

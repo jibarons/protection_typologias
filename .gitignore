@@ -1,0 +1,10 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+# user defined folders and files
+/_data/
+
+
+/.quarto/

@@ -1,0 +1,597 @@
+#	Resultados
+
+## Índice de riesgo de protección
+
+Comenzamos con la construcción de un índice de protección que nos permita sintetizar el riesgo de protección en un solo valor. Con este índice, será posible identificar cuáles son las áreas geográfica más afectadas por el riesgo de protección y realizar un análisis cruzado para identificar que otras variable se asocian con el riesgo de protección. 
+
+###	Construcción de indicadores
+Para la construcción del índice, comenzamos necesariamente con la construcción de indicadores a partir de la Evaluación de Necesidades Multisectoriales. De ella filtramos los datos recogidos para Gaza, centrándonos solo en los estratos de Cisjordania, Jerusalén Este y Hebrón zona H2. Más aún, se eliminó un caso que no respondió al cuestionario. 
+
+Para la identificación y elaboración de los indicadores nos basamos en las problemáticas de protección monitorizadas por el @global_protection_cluster_protection_2022 y las definiciones de los conceptos de seguridad y dignidad planteadas por @michelle_safety_2018. A su vez, tratamos siempre de encontrar indicadores con estándares internacionales y de aplicación regular para la medición de problemáticas en el sector humanitario. Sin embargo, la falta de indicadores de protección internacionalmente establecidos provocó que muchos de los indicadores fueran de elaboración propia.
+
+En cuanto a las características de los indicadores, se plantearon los siguientes principios: 1) clara referencia a una de las problemáticas de protección seguidas por el Global Protección Clúster, 2) clasificables en el marco teórico del riesgo de protección 3) clasificables en el marco teórico de la seguridad y dignidad, 4) se pueden formular de forma binaria (_dummy_), y 5) tuvieran una direccionalidad positiva, esto es a mayor valor, mayor riesgo de protección. Con todo, en la tabla 1 se presentan los indicadores seleccionados teóricamente con el porcentaje de valores perdidos. Siguiendo estas líneas teóricas se crearon `r length(desc_i)`indicadores (@tbl-indicator_desc)
+
+```{r}
+#| label: tbl-indicator_desc
+#| tbl-cap: "Descripción de los indicadores"
+format_tbl(desc_i, align = FALSE)
+```
+
+Antes de proceder con el ACM, hicimos un análisis de valores perdidos. Siguiendo a @cruz_cantero_no_1990, valores por debajo del 1% resultan insignificantes, mientras que para valores perdidos por encima del 10%, es preferible no aplicar métodos de imputación simple. A su vez @nardo_tools_2005 refiere que con valores perdidos superiores al $5%$ no se deben omitir los casos; otros autores reducen el porcentaje debajo de $5%$. Finalmente, suele ser consenso no aplicar métodos de imputación y descartar la variable con valores superiores entre $20%$-$25%$. En nuestro caso, todos los indicadores presentaban menos del $10%$ de valores perdidos. Los indicadores que más valores perdidos presentaban fueron, los de pobreza -poverty_30 y poverty_60- con un $8.8%$ de valores perdidos. El siguiente indicador con valores perdidos era school_unsafe con el $1.9%$ perdido. Otros cinco indicadores presentaban menos del $1%$ de valores perdidos. 
+
+Ante esta situación, no consideramos necesario excluir ningún indicador por valores perdidos. Buscando ese balance entre la complejidad del método y la cantidad de valores perdidos, nos decantamos por el método de imputación _hot-deck_. Aplicamos este método sobre las preguntas de la encuesta –no sobre el indicador. Para aplicar el método, la base de datos se agrupo por estratos y comunidades, y se ordenó en función de variables relevantes a las variables imputadas. Con este método se consiguieron imputar todos los valores perdidos, manteniendo una muestra de `r fmat_num(nrow(indicators_data))` hogares, con la distribución por áreas presentada en la @tbl-distrib_n.
+
+```{r}
+#| label: tbl-distrib_n
+#| tbl-cap: "Distribución de hogares encuestados por estratos"
+case_distrib <- dplyr::count(indicators_data, westbank_cat, area_cat) |>
+  tidyr::pivot_wider(names_from = area_cat, values_from = n, values_fill = 0) |>
+  dplyr::mutate_all(type.convert, as.is = TRUE) |>
+  dplyr::rename(
+    Governorado = westbank_cat, `Area A y B` = area_a_b, `Area C` = area_c, 
+    `Jerusalem Este` = east_jerusalem, `Hebron H2` = hebron_h2,
+    `Campos de refugiados` = camps_wb
+  )
+format_tbl(case_distrib)
+```
+
+### Interpretación del análisis de correspondencia múltiples
+Tras la construcción de los indicadores y la imputación de los valores perdidos, procedimos entonces a aplicar el AMC y a interpretar sus resultados. Siguiendo el método propuesto por @asselin_composite_2009, aplicamos el análisis en dos fases: 1) la primera sirvió para interpretar el modelo y limpiarlo de variables espurias, 2) la segunda sirvió para la creación del índice. 
+
+Empezando por la primera dimensión resultante del ACM, observamos que en efecto se ha cumplido el FAOC. Como se aprecia en @fig-dims_sep, las variables con categorías de valor $1$ se han alineado en las coordenadas positivas de la primera dimensión; mientras, las categorías con valor $0$ se han alineado en las coordinadas negativas. Así, podemos interpretar que la primera dimensión señala el riesgo de protección, agrupando en el eje de coordenadas positivo todas las categorías que representaban riesgo de protección, y en el eje de coordinadas negativo todas las que representaban la ausencia de riesgo de protección. Desde este momento, puesto que nuestro foco se centraba en los factores de protección, nos ocupamos únicamente de las categorías con valor $1$.
+
+Analizando los resultados para la segunda dimensión, se observó la tendencia de las variables relacionadas con la seguridad a tomar posicionarse con coordenadas positivas, mientras que las variables relacionadas con la dignidad tomaban valores negativos (@fig-dims_sep). Así, variables relacionadas con la seguridad ambiental como lo son las órdenes de demolición (*demolition_order*), inseguridad en el hogar (*unsafe_shelter*), riesgo de desahucio (*risk_eviction*), gestión de desechos insegura (*unsafe_waste*); y relacionadas con la seguridad individual como lo son los ataques de colonos (*settler*), se posicionan en el espacio positivo de la segunda dimensión. A su vez, las variables relacionadas con la autonomía económica (*poverty_60*, *poverty_30* y *crisis_cope*), un estado físico y psicológico habilitante (*distress* y *disability*), el estatus social (*refugee_status*, *hoh_female*, *child_labour* y *child_marriage*), el acceso a remedios (*complaint_mechanism*, *aid_satisfaction*, *aid_recieved*), y el acceso a servicios (*health_bar_access2*) se posicionan en el espacio negativo de la segunda dimensión. Con todo, podíamos interpretar que la segunda dimensión estaba capturando el eje de seguridad y dignidad, el cual, sin ser mutuamente excluyente –la falta de dignidad no excluye la seguridad, aunque si la falta de seguridad excluye la dignidad– si representa dos aspectos diferenciados del riesgo de protección.
+
+```{r}
+#| label: fig-dims_sep
+#| fig-cap: "Espacios dimensionales uno y dos, separados"
+#| fig-subcap: 
+#|   - "Coordenadas de los factores de riesgo en la primera dimensión"
+#|   - "Coordenadas de los factores de riesgo en la segunda dimensión"
+#| layout-nrow: 2
+
+cus_theme <- ggplot2::theme(
+    legend.position = "none",
+    axis.title.x = ggplot2::element_text(size = 8),
+    axis.text.x = ggplot2::element_text(angle = 90, hjust = 1, vjust = 0, size = 6),
+    axis.text.y = ggplot2::element_text(size = 6),
+    axis.title.y = ggplot2::element_text(size = 8),
+  )
+intercept <- ggplot2::geom_hline(yintercept = 0, linewidth = 0.3)
+
+# Prepare data (Dim1)
+d1 <- dplyr::mutate(df_m1_res,
+    var = forcats::fct_reorder(var, Dim.1_coord, .desc = TRUE)
+  )
+# Plot
+p1 <- ggplot2::ggplot(d1, ggplot2::aes(x = var, y = Dim.1_coord, fill = Dim.1_coord)) +
+  ggplot2::geom_bar(stat = "identity") +
+  intercept +
+  ggplot2::scale_fill_gradient2(low = "red", mid = "grey", high = "blue",
+    midpoint = 0) +
+  ggplot2::labs(x = "Categorias", y = "Coordenadas Dim. 1") +
+  ggplot2::theme_minimal() +
+  cus_theme
+# Prepare data (Dim2)
+d2 <- dplyr::filter(df_m1_res, grepl("bin_1$", var)) |>
+  dplyr::mutate(
+    var = gsub("^(.+)_bin_1$", "\\1", var),
+    var = forcats::fct_reorder(var, Dim.2_coord, .desc = TRUE)
+  )
+# Plot
+p2 <- ggplot2::ggplot(d2, ggplot2::aes(x = var, y = Dim.2_coord, fill = Dim.2_coord)) +
+  ggplot2::geom_bar(stat = "identity") +
+  intercept +
+  ggplot2::scale_fill_gradient2(low = "red", mid = "grey", high = "blue",
+    midpoint = 0) +
+  ggplot2::labs(x = "Categorias", y = "Coordenadas Dim. 2") +
+  ggplot2::theme_minimal() +
+  cus_theme
+# Print
+p1
+p2
+```
+
+Para completar la interpretación en su conjunto, observamos en la @fig-dims el espacio dimensional con las primeras dos dimensiones, representamos sobre los indicadores anteriores, además al modelo una variable suplementaria para capturar los diferentes estratos de Cisjordania. Estos son Jerusalén Este, Hebrón H2, área Oslo A o B, área Oslo C o Campo de refugiados. Dada la relevancia de las áreas Oslo y otras demarcaciones especiales en los riesgos de protección, su posición en las dimensiones de la modelo seria claves para su interpretación y validación. Con ello, nos propusimos relacionar los resultados de la interpretación del ACM con las realidades del contexto en Cisjordania. Al relacionar el ACM con aspectos contextuales, se observa que los campos de refugiados se posicionan en el área de riesgo de protección, más concretamente en la parte de la dignidad. Cruzando con el contexto palestino, las condiciones de vida en los campos de refugiados son precarias, sin embargo, las fuerzas israelís y los colonos rara vez se adentran en estos. Por otro lado, el área Oslo C también se posiciona en eje de riesgo de protección, pero en el ámbito de la seguridad, siendo aquí donde en su mayoría se ejecutan las incursiones de las fuerzas israelíes y los colonos. Las áreas del Este de Jerusalén, Hebrón H2 y áreas Oslo A y B son áreas generalmente urbanas y con cierto nivel de desarrollo. En particular, las áreas Oslo A y B están bajo jurisdicción de la autoridad palestina, con incursiones poco frecuentes –y en principio coordinadas– de las fuerzas israelíes, y donde la administración de Israel no puede ejercer tanta discrecionalidad. Las áreas de Jerusalén Este y Hebrón H2 son áreas de jurisdicción disputada, pero que se encuentran en pleno centro de amplios núcleos urbanos dentro del área Oslo A.
+
+```{r}
+#| label: fig-dims
+#| fig-cap: "Espacio dimensional del riesgo de protección"
+#| fig-subcap: 
+#|   - "Indicadores de riesgo de protección"
+#|   - "Estratos de Cisjordania"
+#| layout-nrow: 2
+cus_theme <- ggplot2::theme(
+    legend.position = "bottom",
+    axis.title.x = ggplot2::element_text(size = 8),
+    axis.text.x = ggplot2::element_text(angle = 90, hjust = 1, vjust = 0, size = 6),
+    axis.text.y = ggplot2::element_text(size = 6),
+    axis.title.y = ggplot2::element_text(size = 8),
+    legend.title = ggplot2::element_text(size = 8),
+    legend.text = ggplot2::element_text(size = 6),
+    legend.key.size = ggplot2::unit(0.25, "cm")
+  )
+
+p_sup <- factoextra::fviz_mca_var(m_res, invisible = "var", col.var = "contrib", axes = 1:2) +
+  ggplot2::geom_text(size = 2) +
+  ggplot2::geom_vline(xintercept = 0, linetype = "dashed", linewidth = 0.3) +
+  ggplot2::geom_hline(yintercept = 0, linetype = "dashed", linewidth = 0.3) +
+  ggplot2::scale_x_continuous(limits = c(-1,1)) +
+  ggplot2::scale_y_continuous(limits = c(-1,1)) +
+  ggplot2::labs(x = "Dimension 1", y = "Dimension 2", title = "", 
+    caption = "La escala de los ejes se han ajustado para resaltar el resultado") +
+  ggplot2::theme_minimal() +
+  cus_theme
+
+df1 <- dplyr::filter(df_mca_m1, grepl("_1$", name)) |>
+  dplyr::mutate(name = gsub("^(.+)_bin_1$", "\\1", name))
+p_dim <- ggplot2::ggplot(df1, ggplot2::aes(x, y, label = name, color = cos2)) +
+  ggplot2::geom_text(size = 2) +
+  ggplot2::geom_vline(xintercept = 0, linetype = "dashed", linewidth = 0.3) +
+  ggplot2::geom_hline(yintercept = 0, linetype = "dashed", linewidth = 0.3) +
+  ggplot2::scale_color_gradient2(low = "white", mid = "blue", high = "red",
+    midpoint = mean(df1$cos2)) +
+  ggplot2::labs(x = "Dimension 1", y = "Dimension 2") +
+  ggplot2::theme_minimal() +
+  cus_theme
+# print
+p_dim
+p_sup
+```
+
+### Selección de indicadores
+
+Procedimos entonces a analizar la calidad de la primera para determinar si algún factor de riesgo mostraba señas de quedar indeterminado, es decir si no se posicionaba significativamente en el lado positivo o negativo de la primera dimensión. Para ello, observamos la contribución relativa y la prueba de significación v-test. Aquellos factores cuyo v-test no fuera superior a $\lvert 2 \rvert$, serian considerados indeterminados, y por tanto excluidos de los subsecuentes análisis. Esto nos permitía asegurar que solo los factores de riesgo determinados formaran parte del índice de protección.
+
+Como se puede observar en las figuras @fig-qual1_d1 los indicadores relacionados con las barreras de educación –*educa_bar_quality* y *educ_bar_access*– son los que presentan una menor contribución relativa a la inercia de la primera dimensión, es decir son las que menos proveen menor contribución a explicar el riesgo de protección. Mas aun, mientras que *educ_bar_access* resultó ser no significativa con un v-test de `r fmat_num(df_m1_res[df_m1_res$var == "educa_bar_access_bin_1", "Dim.1_v.test"][[1]], 3)`, *educa_bar_quality* la seguía muy de cerca con un `r fmat_num(df_m1_res[df_m1_res$var == "educa_bar_quality_bin_1", "Dim.1_v.test"][[1]], 3)`, en el límite de la significación. Por tanto, decidimos excluir estas variables del modelo, lo que nos ayudaría a simplificarlo, y a incrementar la inercia de la primera dimensión, a incrementar el porcentaje de varianza explicada.   
+
+```{r}
+#| label: fig-qual1_d1
+#| fig-cap: "Prueba de significación para las contribuciones relativas (v-test)"
+p_test1_m1
+```
+
+Observando los coeficientes de calidad para la segunda dimensión en la figura @fig-qual1_d2 vemos que las variables que se posicionan de forma más significativa con valores positivos en el espacio de la seguridad son *demolition_order*, *unsafe_shelter* y *risk_eviction*. En el espacio de la dignidad, representado por las coordenadas negativas, encontramos que *poverty_60*, *distress*, *disability*, *crisis_cope* y *poverty_30* son las que presentan mayor significación. Por otro lado, las variables de inseguridad alimentaria (*fies_mod*), los dos de los tres tipos de violencia (*viol_exploit*, *viol_harrasment*) y la variable de barreras de calidad en la salud (*health_barr_quality*) se mostraban indeterminadas con valores de significación v-test comprendidos entre `r fmat_num(max(df_m1_res[grepl("(fied|viol_[eh]|^hea.+qual).+_1$", df_m1_res$var), "Dim.2_v.test"]), 3)` y `r fmat_num(min(df_m1_res[grepl("(fied|viol_[eh]|^hea.+qual).+_1$", df_m1_res$var), "Dim.2_v.test"]), 3)`, al borde de la significación. Aunque estos indicadores no quedaban determinados en la segunda dimensión –seguridad y dignidad– se puede observar que ejercen una fuerte influencia en la definición del riesgo de protección (@fig-qual1_d1). Así, decidimos mantenerlos para las siguientes fases del análisis, si bien los indicadores de violencia fueron agrupados en uno solo *viol*, representando si "Percibe violencia de cualquier tipo". Esto nos ayudará a simplificar el modelo y reducir el número de variables indeterminadas en la segunda dimensión. Mantener variables indeterminadas en la dimensión de seguridad y dignidad mantiene coherencia teórica, ya que seguridad y dignidad no son mutuamente excluyente, la indeterminación en la clasificación de este eje estaría representando esta no exclusividad.
+
+```{r}
+#| label: fig-qual1_d2
+#| fig-cap: "Prueba de significación para las contribuciones relativas (v-test)"
+p_test2_m1
+```
+
+En este momento, consideramos oportuno hacer una primera evaluación de la inercia capturada por las diferentes dimensiones, sabiendo que en el siguiente paso obtendríamos diferentes resultados en este punto. Para ello, aplicamos la corrección de Benzécri con la siguiente formula:
+
+$$
+\lambda^C_j = (\frac{p}{p-1})^2 (\lambda_j - \frac{1}{1-p})^2
+$$
+
+Una vez ajustados los restrictivos *eigenvalues* que produce el ACM, el modelo capturaba un `r fmat_per(sum(df_eig_adj_m1[1:2, "peig_adj"])*100)` de la inercia de en sus dos primeras dimensiones. La primera capturaba el `r fmat_per(sum(df_eig_adj_m1[1, "peig_adj"])*100)` y la segunda el `r fmat_per(sum(df_eig_adj_m1[2, "peig_adj"])*100)`. 
+
+### Calculo del índice compuesto
+Tras eliminar las variables relacionadas con barreras a la educación, el modelo se redujo a `r length(m_vars)` indicadores representando factores de riesgo de protección. Entonces, volvimos a analizar los coeficientes de calidad. Mirando en primer lugar el porcentaje de inercia explicado por las dos primeras dimensiones, este se incrementó hasta el `r fmat_per(sum(df_eig_adj_m2[1:2, "peig_adj"])*100)` (@fig-scree), superando el 70% recomendado por @lopez-roldan_analisis_2015. La primera capturaba el `r fmat_per(sum(df_eig_adj_m2[1, "peig_adj"])*100)` y la segunda el `r fmat_per(sum(df_eig_adj_m2[2, "peig_adj"])*100)`. Valga notar que más que incrementar la capacidad explicativa del modelo, redujimos su complejidad, aplicando el principio de parsimonia. En cualquier caso, en el ACM rara vez la inclusión de una variable incrementa el porcentaje de inercia explicado. 
+
+```{r}
+#| label: fig-scree
+#| fig-cap: "Porcentaje de inercia explicado por cada dimensión"
+x <- dplyr::filter(df_eig_adj_m2, peig_adj > 0)
+ggplot2::ggplot(x, ggplot2::aes(x = dims, y = peig_adj * 100, group = 1)) +
+  ggplot2::geom_bar(stat = "identity", fill = "steelblue3") +
+  ggplot2::geom_point(size = 2) +
+  ggplot2::geom_line(linetype = "dashed") +
+  ggplot2::labs(x = "Dimensiones", y = "Porcentaje de inercia", 
+    caption = "Eigenvalues corregidos por el método de Benzécri") +
+  ggplot2::theme_minimal() +
+  ggplot2::theme(
+    axis.title.x = element_text(size = 8),
+    axis.text.x = element_text(size = 6),
+    axis.text.y = element_text(size = 6),
+    axis.title.y = element_text(size = 8),
+  )
+```
+
+En cuanto a la significación de las contribuciones relativas para ambas dimensiones, se observaron cambios significativos. Tras eliminar las indicadores de barreras de acceso a la educación, ningún factor de riesgo de protección quedo indeterminado en la primera dimensión, siendo el mínimo coeficiente v-test para esa dimensión de `r fmat_num(min(df_m2_res[grepl(".+_1$", df_m2_res$var), "Dim.1_v.test"]), 3)` en el factor *unsafe_waste*. Para la segunda dimensión el indicador de seguridad alimentaria (*fies_mod*) se mantiene indeterminado y el indicador de barreras de calidad en la salud (*health_bar_quality*) mantuvieron indeterminados. El indicador compilado de violencia (*viol*) se determinaron del lado de la dignidad, si bien con valor v-test al borde de la indeterminación (`r fmat_num(min(df_m2_res[grepl("viol.+_1$", df_m2_res$var), "Dim.2_v.test"]), 3)`)
+
+Tras estas modificaciones, pudimos observar que las consideraciones teóricas que hacíamos sobre el modelo se mantienen (@fig-acm). La primera dimensión capturaba todos los factores relacionados con el riesgo de protección, mientras que la segunda dimensión agrupa los factores más alineados con la dignidad en coordenadas menores que $0$, y aquellos más alineados con la seguridad en coordenadas mayores que $1$.
+
+```{r}
+#| label: fig-acm
+#| fig-cap: "Espacio dimensional del riesgo de protección según modelo final"
+cus_theme <- ggplot2::theme(
+    legend.position = "bottom",
+    axis.title.x = ggplot2::element_text(size = 8),
+    axis.text.x = ggplot2::element_text(angle = 90, hjust = 1, vjust = 0, size = 6),
+    axis.text.y = ggplot2::element_text(size = 6),
+    axis.title.y = ggplot2::element_text(size = 8),
+    legend.title = ggplot2::element_text(size = 8),
+    legend.text = ggplot2::element_text(size = 6),
+    legend.key.size = ggplot2::unit(0.35, "cm")
+  )
+df2 <- dplyr::filter(df_mca_m2, grepl("_1$", name)) |>
+  dplyr::mutate(name = gsub("^(.+)_bin_1$", "\\1", name))
+
+ggplot2::ggplot(df2, ggplot2::aes(x, y, label = name, color = cos2)) +
+  ggplot2::geom_text(size = 2) + 
+  ggplot2::geom_vline(xintercept = 0, linetype = "dashed", linewidth = 0.3) +
+  ggplot2::geom_hline(yintercept = 0, linetype = "dashed", linewidth = 0.3) +
+  ggplot2::scale_color_gradient2(low = "white", mid = "blue", high = "red",
+    midpoint = mean(df1$cos2)) +
+  ggplot2::labs(x = "Dimension 1", y = "Dimension 2") +
+  ggplot2::theme_minimal() +
+  cus_theme
+```
+
+Procedemos entonces a la construcción del índice. Seleccionamos para ello todos los indicadores que presentaron coordenadas mayores que $0$ en la primera dimensión del ACM. Puesto que manejamos indicadores _dummy_ aplicamos una media sobre el valor de los indicadores nos daría el porcentaje de factores de riesgo, sobre el total de indicadores contemplado, al que un hogar se ve expuesto. Sin embargo, como hemos notado, no todos los factores de riesgo tienen el mismo poder discriminatorio. Para tener en cuenta la capacidad discriminatoria de cada indicador, ponderamos la media de modo que un factor de riesgo cobra más importancia, según su poder discriminatorio sobre la población sea mayor. Así, según propone @asselin_composite_2009 procedemos a calcular el índice compuesto $C$ con la siguiente formula 
+
+$$
+C_u = \frac{\sum_{k=1}^{k} \sum_{j_k=1}^{j_k}W^k_{j_k}I^k_{j_k}} {{K}}
+$$
+
+Donde:
+
+* $K$ es el número de indicadores
+* $J_k$ es el número de categorías para cada indicador $k$
+* $W^k_{j_k}$ coordinadas normalizadas del primer eje
+* $I^k_{j_k}$ indicador _dummy_ tomando valor $1$ cuando la unidad $u$ tiene la categoría $j_k$
+
+Haciendo un análisis del índice de riesgo de protección por cada área de Cisjordania (@fig-p_risk), se observar que el área con más riesgo son los campos de refugiados palestinos, con un valor medio del `r fmat_num(weighted.mean(as.numeric(data_risk[data_risk$area_cat == "camps_wb", "risk_sc"][[1]]), data_risk[data_risk$area_cat == "camps_wb", "weights"][[1]]), 2)`, seguido por el área Oslo C con un riesgo medio del `r fmat_num(weighted.mean(as.numeric(data_risk[data_risk$area_cat == "area_c", "risk_sc"][[1]]), data_risk[data_risk$area_cat == "area_c", "weights"][[1]]), 2)`. El área que menos riesgo de protección presenta es el núcleo urbano de Jerusalén Este, que presenta un valor medio del (`r fmat_num(weighted.mean(as.numeric(data_risk[data_risk$area_cat == "east_jerusalem", "risk_sc"][[1]]), data_risk[data_risk$area_cat == "east_jerusalem", "weights"][[1]]), 2)`). Estos resultados vienen a capturar la relación con el contexto que describimos anteriormente, donde los campos de refugiados y el área Oslo C son las áreas más afectadas por problemáticas de protección dentro de Cisjordania.
+
+Cuando observamos la relación del riesgo con los Governorados (@fig-p_risk), apreciamos que Tubas es el que acumula más riesgo, con un valor medio del `r fmat_num(weighted.mean(as.numeric(data_risk[data_risk$westbank_cat == "tubas", "risk_sc"][[1]]), data_risk[data_risk$westbank_cat == "tubas", "weights"][[1]]), 2)`, si bien su mediana se eleva hasta el 0.32. Es decir, 50% de los hogares tiene un valor de riesgo del 0.32 en el Governorado de Tubas. Le siguen de cerca Jenin y Jerico con valores medios del `r fmat_num(weighted.mean(as.numeric(data_risk[data_risk$westbank_cat == "jenin", "risk_sc"][[1]]), data_risk[data_risk$westbank_cat == "jenin", "weights"][[1]]), 2)` y `r fmat_num(weighted.mean(as.numeric(data_risk[data_risk$westbank_cat == "jericho", "risk_sc"][[1]]), data_risk[data_risk$westbank_cat == "jericho", "weights"][[1]]), 2)` respectivamente. El Governorado que menor riesgo de protección presente es Salfit con un valor medio del `r fmat_num(weighted.mean(as.numeric(data_risk[data_risk$westbank_cat == "salfit", "risk_sc"][[1]]), data_risk[data_risk$westbank_cat == "salfit", "weights"][[1]]), 2)`
+
+```{r}
+#| label: fig-p_risk
+#| fig-cap: "Distribución geográfica del riesgo de protección"
+#| fig-subcap: 
+#|   - "Estratos de Cisjordania"
+#|   - "Governorados de Cisjordania"
+#| layout-ncol: 2
+
+cus_theme <- ggplot2::theme(
+    legend.position = "none",
+    axis.title.x = ggplot2::element_text(size = 10),
+    axis.text.x = ggplot2::element_text(angle = 90, hjust = 1, vjust = 0, size = 9),
+    axis.text.y = ggplot2::element_text(size = 9),
+    axis.title.y = ggplot2::element_text(size = 10),
+  )
+bp_risk_area <- ggplot2::ggplot(data_risk,
+  ggplot2::aes(x = area_cat, y = risk_sc, fill = area_cat)
+) +
+  ggplot2::geom_boxplot(ggplot2::aes(weight = weights)) +
+  #ggplot2::geom_jitter(alpha = 0.10) +
+  ggplot2::labs(x = "Estrato", y = "Riesgo de Proteccion") +
+  ggplot2::theme_minimal() +
+  cus_theme
+
+bp_risk_gov <- ggplot2::ggplot(data_risk, 
+  ggplot2::aes(x = westbank_cat, y = risk_sc, fill = westbank_cat)
+) +
+  ggplot2::geom_boxplot(ggplot2::aes(weight = weights)) +
+  #ggplot2::geom_jitter(alpha = 0.10) +
+  ggplot2::labs(x = "Governorado", y = "Riesgo de Proteccion") +
+  ggplot2::theme_minimal() +
+  cus_theme
+#print
+bp_risk_area
+bp_risk_gov
+```
+
+Además de la distribución geográfica del riesgo de protección, consideramos relevante cruzarlo con otros indicadores comunes que describen características sociodemográficas de la poblacion, entre ellos elegimos la presencia de niños o niñas en el hogar, la presencia de deuda, el acceso a fuentes de agua potable. Esto nos permitirá hacer una primera aproximación a las características sociodemográficas de los hogares en riesgo de protección. Comenzando con la presencia de niños o niñas en el hogar (@fig-p_risk_socio), no se apreciaron diferencias significativas, siendo que ambos grupos -con o sin niños o niñas- presentaban valores medio del riesgo de protección similares (`r fmat_num(weighted.mean(as.numeric(data_risk[data_risk$children_bin == 1, "risk_sc"][[1]]), data_risk[data_risk$children_bin == 1, "weights"][[1]]), 2)` y `r fmat_num(weighted.mean(as.numeric(data_risk[data_risk$children_bin == 0, "risk_sc"][[1]]), data_risk[data_risk$children_bin == 0, "weights"][[1]]), 2)` respectivamente). Explorando la relación del riesgo de protección con la presencia de deuda (@fig-p_risk_socio), si se observaron diferencias, siendo que los hogares sin deuda presentaban un riesgo medio de protección del `r fmat_num(weighted.mean(as.numeric(data_risk[data_risk$hh_debt_bin == 0, "risk_sc"][[1]]),                        data_risk[data_risk$hh_debt_bin == 0, "weights"][[1]]), 2)`, mientras que en los hogares con deuda el riesgo de protección de elevaba hasta `r fmat_num(weighted.mean(as.numeric(data_risk[data_risk$hh_debt_bin == 0, "risk_sc"][[1]]), data_risk[data_risk$hh_debt_bin == 0, "weights"][[1]]), 2)`. Aunque se apreciaron estas diferencias, estas no fueron estadísticamente significativas. Finalmente, cuando observamos el riesgo de protección según el acceso a agua potable de los hogares, encontramos diferencias significativas (@fig-p_risk_socio). Mientras que aquellos con acceso a agua potable presentaban un riesgo medio de protección del  `r fmat_num(weighted.mean(as.numeric(data_risk[data_risk$safe_water_bin == 1, "risk_sc"][[1]]), data_risk[data_risk$safe_water_bin == 1, "weights"][[1]]), 2)`; aquellos sin acceso a agua potable presentaban un riesgo medio de protección `r fmat_num(weighted.mean(as.numeric(data_risk[data_risk$safe_water_bin == 0, "risk_sc"][[1]]), data_risk[data_risk$safe_water_bin == 0, "weights"][[1]]), 2)`  
+
+
+
+```{r}
+#| label: fig-p_risk_socio
+#| fig-cap: "Características sociodemográficas del riesgo de protección"
+#| fig-subcap: 
+#|   - "Riesgo por presencia de niños o niñas"
+#|   - "Riesgo por presencia de deuda"
+#|   - "Riesgo por acceso a agua potable"
+#| layout-ncol: 3
+
+cus_theme <- ggplot2::theme(
+    legend.position = "none",
+    axis.title.x = ggplot2::element_text(size = 10),
+    axis.text.x = ggplot2::element_text(angle = 90, hjust = 1, vjust = 0, size = 9),
+    axis.text.y = ggplot2::element_text(size = 9),
+    axis.title.y = ggplot2::element_text(size = 10),
+  )
+bp_risk_child <- ggplot2::ggplot(data_risk,
+  ggplot2::aes(x = children_bin, y = risk_sc, fill = children_bin)
+) +
+  ggplot2::geom_boxplot(ggplot2::aes(weight = weights)) +
+  #ggplot2::geom_jitter(alpha = 0.10) +
+  ggplot2::labs(x = "Presencia de niños o niñas", y = "Riesgo de Proteccion") +
+  ggplot2::theme_minimal() +
+  cus_theme
+bp_risk_debt <- ggplot2::ggplot(data_risk, 
+  ggplot2::aes(x = hh_debt_bin, y = risk_sc, fill = hh_debt_bin)
+) +
+  ggplot2::geom_boxplot(ggplot2::aes(weight = weights)) +
+  #ggplot2::geom_jitter(alpha = 0.10) +
+  ggplot2::labs(x = "Presencia de deuda", y = "Riesgo de Proteccion") +
+  ggplot2::theme_minimal() +
+  cus_theme
+bp_risk_wat <- ggplot2::ggplot(data_risk, 
+  ggplot2::aes(x = safe_water_bin, y = risk_sc, fill = safe_water_bin)
+) +
+  ggplot2::geom_boxplot(ggplot2::aes(weight = weights)) +
+  #ggplot2::geom_jitter(alpha = 0.10) +
+  ggplot2::labs(x = "Accesso a agua potable", y = "Riesgo de Proteccion") +
+  ggplot2::theme_minimal() +
+  cus_theme
+
+#print
+bp_risk_child
+bp_risk_debt
+bp_risk_wat
+```
+
+## Tipologías del riesgo de protección
+
+La identificación de e una tipología de riesgo de protección se posiciona como un paso clave para descomponer la problemática e incrementar el valor explicativo del análisis. Por medio de la tipología podemos estructurar la problemática entorno a sus dimensiones más destacadas. Para la identificar las tipologías, elegimos las dos primeras dimensiones resultantes del ACM. Estas dimensiones fueron interpretadas como: la primera comprendiendo el riesgo de protección en su conjunto, la segunda representado el eje de seguridad y dignidad. Procedimos por tanto a evaluar con el estadístico de Hopkings, para comprobar que las dimensiones seguían una distribución uniforme. En tal caso, no se podrían identificar conglomerados, ni tipologías concretas. Sin embargo, el estadístico resulto con valor de `r fmat_num(hopking, 3)` sobre una muestra aleatoria de 30% de hogares, rechazando la hipótesis nula de distribución uniforme.
+
+Procedimos por tanto a aplicar dos métodos de ACL: el método jerárquico y el _k-means_ jerárquico. Para el ACL jerárquico usamos el algoritmo de aglomeración Ward 2 [@murtagh_wards_2014] con distancia euclidiana. Para el _k-means_ jerárquico, usamos los mismos parámetros que para el método anterior en el paso jerárquico, pero para el paso de _k-means_ aplicamos el algoritmo de Hartigan and Wong (1979).  
+
+Una vez aplicado el ACL para cada método, comenzamos a evaluar la calidad de los resultados. En un primer momento nos aproximamos a la calidad empírica. Para ellos nos servimos de las siluetas de @rousseeuw_silhouettes_1987. Así, la media de las siluetas para el método de _k-means_ jerárquico era ligeramente más alta y más estable (`r fmat_num(mean(p_silh_hk$data$sil_width),3)` $\pm$ `r fmat_num(sd(p_silh_hk$data$sil_width),3)`) que las del método jerárquico (`r fmat_num(mean(p_silh_h$data$sil_width),3)` $\pm$ `r fmat_num(sd(p_silh_h$data$sil_width),3)`. Mas aun, en la @tbl-silh se observa que el método que _k-means_ jerárquico ofrece unos resultados de siluetas más balanceados entre los tres clústeres, mientras que el método jerárquico concentra un buen resultado en uno de los clústeres, pero los otros dos resultan de peor calidad. Desde un punto de vista empírico, las siluetas indicaban mejor resolución del ACL por parte del _k-means_ jerárquico.
+
+```{r}
+#| label: tbl-silh
+#| tbl-cap: "Comparación de siluetas para distintos métodos ACL"
+#| tbl-subcap:
+#|   - "Método jerárquico"
+#|   - "Método Kmeans jerárquico"
+#| layout-ncol: 2
+format_tbl(silh_h)
+format_tbl(silh_hk)
+```
+
+Pasando a la interpretación de los resultados, la @fig-cluster muestra los conglomerados formados por cada método. Se puede observar que el método jerárquico produce un solapamiento entre dos de los conglomerados. De aquí probablemente resultaron sus bajos coeficientes de siluetas en el análisis anterior @tbl-silh. Este problema se podría solucionar asignando para cada uno de los hogares solapados, el clúster correspondiente a su vecino más próximo. En cualquier caso, se observa también que el método jerárquico tiende a ocupar con los clústeres 2 y 3, el espacio de menor riesgo de protección, aquel situado por debajo de 0 en el primer eje. Así, parece que muestra más dificultades en capturar la división del eje de Riesgo de protección entre los hogares con mayor riesgo de protección, y aquellos con menor riesgo. Por su parte, el método _k-means_ jerárquico produce una clasificación más limpia, sin solapar ningún caso. además de respetar de mejor forma la división del riesgo de protección en el primer eje.
+
+```{r}
+#| label: fig-cluster
+#| fig-cap: "Comparación de resultados para distintos métodos ACL"
+#| fig-subcap:
+#|   - "Método jerárquico"
+#|   - "Método k_means jerárquico"
+#| layout-ncol: 2
+cus_theme <- ggplot2::theme(
+    legend.position = "bottom",
+    axis.title.x = ggplot2::element_text(size = 8),
+    axis.text.x = ggplot2::element_text(size = 6),
+    axis.text.y = ggplot2::element_text(size = 6),
+    axis.title.y = ggplot2::element_text(size = 8),
+    legend.title = ggplot2::element_text(size = 8),
+    legend.text = ggplot2::element_text(size = 6),
+    legend.key.size = ggplot2::unit(0.5, "cm")
+  )
+col_point <- c("steelblue3", "firebrick3", "darkgoldenrod3")
+# Hierarchical
+p_clust_h$layers[[4]] <- NULL
+ph <- p_clust_h +
+    ggplot2::scale_color_manual(values = col_point) +
+    ggplot2::geom_vline(xintercept = 0, linetype = "dashed", linewidth = 0.3) +
+    ggplot2::geom_hline(yintercept = 0, linetype = "dashed", linewidth = 0.3) +
+    ggplot2::labs(x = "Dim. 1: Riesgo de Protección", 
+      y = "Dim. 2: Seguridad y Dignidad", title = "") +
+    ggplot2::theme_minimal() +
+    cus_theme
+# Hierchical k-means
+p_clust_hk$layers[[4]] <- NULL
+pk <- p_clust_hk +
+    ggplot2::scale_color_manual(values = col_point) +
+    ggplot2::geom_vline(xintercept = 0, linetype = "dashed", linewidth = 0.3) +
+    ggplot2::geom_hline(yintercept = 0, linetype = "dashed", linewidth = 0.3) +
+    ggplot2::labs(x = "Dim. 1: Riesgo de Protección", 
+      y = "Dim. 2: Seguridad y Dignidad", title = "") +
+    ggplot2::theme_minimal() +
+    cus_theme
+# print
+ph
+pk
+```
+
+Tras la articulación anterior, decidimos que el resultado ofrecido por el método _k-means_ jerárquico ofrece resultados de mayor calidad empírica, y mejor interpretables para la identificación de tipologías. Con ello, procedimos a describir los parangones –los tipos ideales– que estructuraban el riesgo de protección. Como se muestra en la @fig-cluster, analizando sus centroides se pueden apreciar tres tipos bien definidos:
+
+1. El primer tipo representaba a los hogares con **menor riesgo de protección** con un total de 2207 hogares. Esto se interpretaba del valor negativo en el eje del riesgo de protección `r fmat_num(hk$center[1,1], 3)`, el que consecuentemente se correspondía con un valor indeterminado, en torno a 0, en el eje de la seguridad y la dignidad `r fmat_num(hk$center[1,1], 3)`. Este tipo presentaba un riesgo de protección del `r fmat_num(mean(hh_clust_risk[hh_clust_risk$cluster == 1, "risk_sc"]),3)` medido por el índice compuesto creado anteriormente. Este tipo no se ve gravemente afectado ni por factores de seguridad, como son las demoliciones, los desahucios o inseguridad en la vivienda, ni por factores relacionados con la dignidad, como lo son la pobreza monetaria, la seguridad alimentaria o el estatus social, determinado por el estatus de refugiado o de mujer en cabeza del hogar.
+2. El segundo tipo representaba a los hogares con **riesgos de protección relacionados con la dignidad**, con un total de 871 hogares. Esto se mostraba en un riesgo de protección más elevado con valores en el primer eje de `r fmat_num(hk$center[2,1], 3)`. Observando el segundo eje -de la seguridad y la dignidad- se apreciaba que sus problemáticas estaban más relacionadas con la dignidad, mostrando valores negativos en ese eje (`r fmat_num(hk$center[2,2], 3)`). El riesgo de protección según el índice compuesto era de `r fmat_num(mean(hh_clust_risk[hh_clust_risk$cluster == 2, "risk_sc"]),3)` para este tipo. Al contrario que el primer tipo, este segundo tipo si se ve afectado de manera relevante por el riesgo de protección, si bien más severamente afectado por factores relacionados con la dignidad, entre ellos: la pobreza monetaria, la seguridad alimentaria, el estatus social, determinado por el estatus de refugiado o de mujer en cabeza del hogar, o el trabajo y el matrimonio infantil.
+3. El tercer tipo representaba a los hogares con **riesgos de protección relacionados con la seguridad**, con un total de 310 hogares. Es el que mostraba mayor riesgo de protección, con un valor en el primer eje de `r fmat_num(hk$center[3,1], 3)`. A su vez, sus problemáticas se escoraban significativamente hacia la seguridad (`r fmat_num(hk$center[3,2], 3)`). Para este clúster, el índice de riesgo de protección presentaba un valor de `r fmat_num(mean(hh_clust_risk[hh_clust_risk$cluster == 3, "risk_sc"]),3)`.  Igual que para el segundo tipo, este también se ve afectado severamente por el riesgo de protección, incluso con mayor intensidad. Si bien, los factores relacionados con la seguridad juegan un papel más relevante sobre este tipo, con factores como las demoliciones, los desahucios, inseguridad en la vivienda, los ataques de colonos o la inseguridad en la escuela. El hecho de que el riesgo de protección se presente con mayor intensidad en este grupo, se alinearía con el concepto de que la seguridad es condición necesaria para la dignidad, si bien no al revés. así, aquellos hogares con riesgo de protección relacionado con la seguridad, implícitamente se ven más afectados por el riesgo de protección en general.
+
+Con todo, disponíamos de una medida sintética para el riesgo de protección, que ya analizamos con detalle anteriormente. Ahora, disponemos de una descomposición de este riesgo en diferentes tipos ideales que aportan detalle y valor explicativo sobre el riesgo de protección. Observando en primer lugar su distribución geográfica (@fig-cluster_gov), apreciamos que es en los Governorados de Jerusalén y Tubas donde se concentran la mayoría de hogares con riesgo de protección relacionadas con la seguridad, con un `r fmat_per(hh_clust_gov[hh_clust_gov$westbank_cat == "jerusalem_2" & hh_clust_gov$cluster==3, "p"][[1]]*100)` y un `r fmat_per(hh_clust_gov[hh_clust_gov$westbank_cat == "tubas" & hh_clust_gov$cluster==3, "p"][[1]]*100)` respectivamente. Sin embargo,mientras que en Tubas estos hogares representan el `r fmat_per(hh_clust_clus[hh_clust_clus$westbank_cat == "tubas" & hh_clust_clus$cluster==3, "p"][[1]]*100)` del total de hogares en el Governorado, en Jerusalén representan solo el `r fmat_per(hh_clust_clus[hh_clust_clus$westbank_cat == "jerusalem_2" & hh_clust_clus$cluster==3, "p"][[1]]*100)`. Asi, en Tubas se observa la mayor concentración de riesgo de protección relacionado con la seguridad.
+
+Cuando observamos la distribución de los clústeres con riesgo de protección relacionados con la dignidad, mayoría de los clúster se distribuyen entre el Governorado de Nablus `r fmat_per(hh_clust_gov[hh_clust_gov$westbank_cat == "nablus" & hh_clust_gov$cluster==2, "p"][[1]]*100)` y el de Qalqiliya `r  fmat_per(hh_clust_gov[hh_clust_gov$westbank_cat == "qalqiliya" & hh_clust_gov$cluster==2, "p"][[1]]*100)`. En cuanto a su concentración ambos Governorados son los que mayor concentración de este tipo presentan con valores de `r fmat_per(hh_clust_clus[hh_clust_clus$westbank_cat == "nablus" & hh_clust_clus$cluster==2, "p"][[1]]*100)` y del `r fmat_per(hh_clust_clus[hh_clust_clus$westbank_cat == "qalqiliya" & hh_clust_clus$cluster==2, "p"][[1]]*100)` respectivamente. Como pudimos apreciar en el análisis del índice de riesgo de protección por Governorados (@fig-p_risk), Nablus y Qalqiliya no destacaban como Governorados con mayor riesgo, sin embargo, cuando identificamos diferentes tipologías de riesgo, estos Governorados resaltan como los más afectados por el riesgo relacionado con la dignidad.   
+
+Con todo, se puede observar en la @fig-cluster_gov que Salfit, Hebrón y Jerusalén son los que presentan una mayor concentración de hogares de la tipología de Menor riesgo de protección. A su vez, la tipología de riesgo de protección relacionado con la seguridad se distribuye mayoritariamente entre en Jerusalén y Tubas, si bien Hebrón y Jericó también presentan hogares en esta tipología. En cualquier caso, en Tubas la mas de la mitad de los hogares forman parte de este tipo de riesgo de protección relacionado con la seguridad. Por su parte, el riesgo de protección relacionado con la dignidad se distribuye sobre todo entre Nablus y Qalqilia. Estos dos Governorados, muestra casi exclusivamente esta tipología de riesgo, junto con Tulkarem. en términos generales, excepto para Tubas, el riesgo de protección relacionado con la dignidad es más frecuente en todos los Governorados.
+
+```{r}
+#| label: fig-cluster_gov
+#| fig-cap: "Distribución territorial de los tipos de protección"
+#| fig-subcap: 
+#|   - "Distribución de Clústeres por Governorado"
+#|   - "Concentración de Clústeres por Governorados"
+#| layout-ncol: 2
+cus_theme <- ggplot2::theme(
+    legend.position = "bottom",
+    axis.title.x = ggplot2::element_text(size = 8),
+    axis.text.x = ggplot2::element_text(size = 6),
+    axis.text.y = ggplot2::element_text(size = 6),
+    axis.title.y = ggplot2::element_text(size = 8),
+    legend.title = ggplot2::element_text(size = 8),
+    legend.text = ggplot2::element_text(size = 6),
+    legend.key.size = ggplot2::unit(0.25, "cm")
+  )
+
+p1 <- ggplot2::ggplot(hh_clust_gov, ggplot2::aes(x = westbank_cat, y = p*100, fill = cname)) +
+    ggplot2::geom_bar(stat = "identity", position = "dodge") +
+    ggplot2::coord_flip() +
+    ggplot2::labs(x = "Governorados", y = "Porcentaje de hogares") +
+    ggplot2::theme_minimal() +
+    cus_theme
+p2 <- ggplot2::ggplot(hh_clust_clus, ggplot2::aes(x = westbank_cat, y = p*100, fill = cname)) +
+    ggplot2::geom_bar(stat = "identity") +    
+    ggplot2::coord_flip() +
+    ggplot2::labs(x = "Governorados", y = "Porcentaje de hogares") +
+    ggplot2::theme_minimal() +
+    cus_theme
+p1
+p2
+```
+
+Conociendo las coordenadas de las localidades de cada hogar, podemos representar los clústeres asignados a cada hogar en un mapa, para comprender mejor la distribución territorial del riesgo de protección (@fig-cluster_map). Nótese que en la @fig-cluster_map cada punto representa un hogar, si bien esa no es su localización exacta, es una desviación aleatoria entorno a las coordenadas de la localidad a la que pertenece cada hogar. En cualquier caso, observamos que la distribución geográfica de los diferentes tipos de protección es bastante uniforme, similar a los resultados obtenidos por @ibarguen_developing_2018. No obstante, se pueden apreciar la aglomeración antes descritas de la tipología de riesgo de protección relacionado con la dignidad en Nablus y Qalqiliya. A su vez, se observan núcleo de la tipología de riesgo relacionados con la seguridad en Tubas y Jericó (@fig-cluster_map). Podemos aquí relacionar las tipologías con el contexto de Palestina, donde Governorados como Nablus y Qalqiliya concentran la mayoría de los campos de refugiados Palestinos, donde las condiciones de vida son significativamente más desfavorables en comparación con otras áreas de Palestina, a pesar de encontrarse en áreas Oslo A y B. además, estos Governorados se ven afectados por los asentamientos de colonos que limitan el acceso a servicios y ponen restricciones a su movilidad. Por su parte los principales focos de la tipología de riesgo de protección relacionado con la seguridad se observan en el área C de Tubas y Jericó, a lo largo del Valle del Jordán, donde se asientas las comunidades de beduinos y la zona militar marcada por Israel. En estas comunidades son frecuentes las demoliciones y las incursiones de las fuerzas armadas de Israel.
+
+
+```{r}
+#| label: fig-cluster_map
+#| fig-cap: "Distribución territorial de los tipos de protección"
+tmap::tm_shape(oslo) +
+  tmap::tm_polygons("CLASS", style = "cat", alpha = 0.5) +
+  tmap::tm_layout(legend.outside = TRUE,
+    legend.position = c("right", "top"))+ 
+  tmap::tm_shape(adm2) +
+  tmap::tm_borders() +
+  tmap::tm_shape(sf::st_jitter(hh_clust_sf, factor = 0.015)) +
+  tmap::tm_symbols(size=0.05, col = "cluster", 
+    palette = c("steelblue3", "firebrick3", "darkgoldenrod3")) +
+  tmap::tm_layout(frame = FALSE) +
+  tmap::tm_credits(size = 10,  position = c("LEFT", "BOTTOM"),
+    text = "Se ha añadido jitter para esparcir los hogares con respecto a las coordinadas de su localidad")
+```
+
+De hecho cuando observamos la tipología de los clústeres según el tipo de área (@fig-cluster_area) vemos que efectivamente la tipología de riesgo relacionada con la dignidad es significativamente más frecuente en los  campos de refugiados, mientras que la tipología de riesgo relacionado con la seguridad es más frecuentemente en área Oslo C.
+
+```{r}
+#| label: fig-cluster_area
+#| fig-cap: "Concentración de Clústeres por Tipo de área"
+cus_theme <- ggplot2::theme(
+    legend.position = "bottom",
+    axis.title.x = ggplot2::element_text(size = 8),
+    axis.text.x = ggplot2::element_text(size = 6),
+    axis.text.y = ggplot2::element_text(size = 6),
+    axis.title.y = ggplot2::element_text(size = 8),
+    legend.title = ggplot2::element_text(size = 8),
+    legend.text = ggplot2::element_text(size = 6),
+    legend.key.size = ggplot2::unit(0.25, "cm")
+)
+ggplot2::ggplot(hh_clust_area, ggplot2::aes(x = area_cat, y = p*100, fill = cname)) +
+    ggplot2::geom_bar(stat = "identity") +
+    ggplot2::coord_flip() +
+    ggplot2::labs(x = "Governorados", y = "Porcentaje de hogares") +
+    ggplot2::theme_minimal() +
+    cus_theme
+```
+
+
+## Profundización cualitativa
+
+Como hemos podido observar, la mayoría de los hogares con tipología de riesgo relacionada con la seguridad se concentraban en el área Oslo C (@fig-cluster_area). El consorcio de protección en Cisjordania centra su acción en esta área. Los grupos de discusión realizados por este consorcio a sus beneficiarios ofrecen la posibilidad de profundizar en las características de esta tipología de riesgo de protección. Así, presentamos la profundización cualitativa con un análisis de sentimiento y de coocurrencia. Para este análisis dispusimos de información para un total de `r length(unique(q_data$cluster_id))` localidades en el área Oslo C distribuidas entre 9 Governorados de Cisjordania. El Governorado que más localidades concentraba era el de Hebrón, con 42, seguido po Ramallah y Tubas con 14 y 11 respectivamente. Las que menos localidades comprendían eran Tulkarm con una localidad, Nablus y Qalqiliya con 4 cada uno. 
+
+
+### Análisis de sentimientos
+
+En total de las `r fmat_num(length(unique(q_data$cluster_id)))` localidades, se registraron un total de `r fmat_num(nrow(text_df))` parrafos unicos de las notas de campo de los entrevistados. Estos representaban untotal de `r fmat_num(nrow(words))` palabras, de las cuales `r fmat_num(length(unique(words$word)))` era palabras unicas. De estas, el $25%$ de las palabras aparecía `r fmat_num(quantile(word_count$n)[[4]])` o más veces, y el $1%$ tenía una frecuencia de `r fmat_num(quantile(word_count$n, probs = seq(.1, 1, by = .01))[[90]])` o más. Seria sobre el $25%$ de las palabras con más frecuencia, sobre las que atribuiríamos los sentimiento a cada palabra.  
+
+Como se puede observar en la @fig-sentiment el sentimiento generalizado es significativamente negativo, en casi todas las localidades entrevistadas, con un sentimiento neto del. Solo 5 localidades mostraron un sentimiento positivo, con un sentimiento neto medio de `r fmat_num(mean(locality_sentiment[, "sentiment"][[1]]), 3)`. Solo `r fmat_num(length(locality_sentiment[locality_sentiment$sentiment > 0, "sentiment"][[1]]), 2)` localides presentaban un sentimiento neto positivo, y una un sentimiento neto neutro (i.e. $0$). De aquellas localidades con sentimiento neto positivo, la que más palabras positivas concentraba era `r length(locality_sentiment[locality_sentiment$sentiment > 0, "positivo"][[1]])`. El resto de las localidades presentaba un sentimiento neto negativo. La media de sentimiento neto. La que presentaba un mayor sentimiento negativo, presentaba un sentimiento neto de `r fmat_num(min(locality_sentiment[locality_sentiment$sentiment < 0, "sentiment"][[1]]), 2)`.
+
+```{r}
+#| label: fig-sentiment
+#| fig-cap: "Sentimiento por localidades en área Oslo C"
+cus_theme <- ggplot2::theme(
+    axis.title.x = ggplot2::element_text(size = 8),
+    axis.text.x = ggplot2::element_blank(),
+    axis.text.y = ggplot2::element_text(size = 6),
+    axis.title.y = ggplot2::element_text(size = 8),
+)
+
+ggplot2::ggplot(locality_sentiment, ggplot2::aes(as.factor(loc_id), sentiment, fill = sent_cat)) +
+  ggplot2::geom_col(show.legend = FALSE) +
+  ggplot2::labs(x = "Localidades", y= "Sentimiento") +
+  ggplot2::theme_minimal() +
+  cus_theme
+```
+
+
+Observando las palabras con carga positiva o negativas (@fig-wcloud), se podía apreciar que están relacionadas con ayuda provista por las organizaciones. Sobre todo, relacionada con la provisión de paneles solares y conexión a la red eléctrica. Entre ellas destacaban la palabra _"service"_ con una frecuencia de 128 apariciones, seguida de las palabras _"rehabilitation"_ y _"connected"_, con 79 y 39 apariciones respectivamente. Como ya hemos referido las demoliciones en el área Oslo C provocan la destrucción de infraestructura y genera incursiones de las fuerzas israelíes en las localidades. A su vez, quedando fuera de la competencia de la autoridad palestina, y siendo en esta área donde se asientan los colonos, es en esta área donde ocurren más encuentros y de mayor severidad entre colonos israelíes y palestinos. Así, no era de extrañar las palabras con carga negativa que aparecían con mayor frecuencia. Entre ellas destacaron las palabras _"lack"_ con 127 apariciones, seguida de _"settlers"_ y _"cost"_ con 94 y 87 apariciones respectivamente. Se puede observar entonces el contenido de las problemáticas que enfrentan los hogares en el área Oslo C, pero también el contenido de los acontecimientos que despiertan sentimientos positivos.    
+
+```{r}
+#| label: fig-wcloud
+#| fig-cap: "Palabras más frecuentes por tipo de sentimiento"
+#| fig-subcap: 
+#|   - "Sentimientos positivos"
+#|   - "Sentimiento negativos"
+#| layout-ncol: 2
+
+# positive
+pos_word <- dplyr::filter(word_sent, sentiment > 0) %>% dplyr::count(word, wt = n)
+p_pos <- wordcloud::wordcloud(words = pos_word$word, freq = abs(pos_word$n), 
+    min.freq = 1, max.words = 50, random.order = FALSE,
+    rot.per = 0.35, colors = RColorBrewer::brewer.pal(8, "Dark2"))
+# Negative
+neg_word <- dplyr::filter(word_sent, sentiment < 0) %>% dplyr::count(word, wt = n)
+p_neg <- wordcloud::wordcloud(words = neg_word$word, freq = abs(neg_word$n), 
+    min.freq = 1, max.words = 50, random.order = FALSE,
+    rot.per = 0.35, colors = RColorBrewer::brewer.pal(8, "Dark2"))
+# print
+p_pos
+p_neg
+```
+
+### Análisis de Coocurrencia
+
+```{r}
+x <- dplyr::count(bigrams, trigram) %>%
+  dplyr::arrange(desc(n)) %>% head(n = 10) %>% dplyr::pull(trigram)
+x <- paste(x,collapse = ", ")
+
+```
+
+Para el análisis de coocurrencia nos basamos en los llamados _bigram_ en donde la unidad de análisis son los pares de palabras. Obtuvimos un total de `r fmat_num(nrow(bigrams))`, de los cuales `r `fmat_num(nrow(dplyr::distinct(bigrams, trigram)))` correspondían a unidades únicas. Los diez _bigrams_ más frecuentes fueron `r x`. Trazando los vínculos entre los _bigrams_ con más de diez apariciones (@fig-cocurrence), pudimos observar unidades de significado más complejas que describían problemáticas y eventos referidos frecuentemente por los hogares en el área Oslo C. Entre ellas, cabía destacar eventos aislados, como lo son la presencia de _wild animals_, y _natural hazards_; la necesidad de _solar panels_, de _shelter rehabilitation_ y de _school buses_ para llegar a las escuelas -situadas en áreas Oslo A y B. Relacionado a esto se puede observar también la referencia a _movement restrictions_, _30 minutes_ en relación al tiempo necesario para acceder a servicios básicos, _settler violence_ y _military trainings_ en referencia a la presencia de amenazas israelíes.
+
+Mas aun, se podía observar (@fig-cocurrence) relaciones más complejas, como, por ejemplo, la imposibilidad de registrar los coches privados para poder circular en área Oslo C, necesitando medios alternativos implicando taxis y transporte público, el cual es limitado y también sufre restricciones, impactando el acceso a servicios de salud y escuela. Otra problemática compleja, y complementaria, se trazaba con el pobre estado de las carreteras y las condiciones ambientales que las hacen impasables; además de la falta de _by-passes_ para cruzar las carreteras y asentamiento de los colones -los palestinos no están autorizados a recorrer las carreteras de los colonos o cruzar por sus asentamientos. 
+
+
+```{r}
+#| label: fig-cocurrence
+#| fig-cap: "Diagrama de Coocurrencia de palamas más relevantes"
+set.seed(20221231)
+bigram_counts <- dplyr::count(bigrams, area_cat, word1, word2)
+
+bigram_graph <- bigram_counts %>%
+  dplyr::filter(n > 10) %>%
+  dplyr::select(-area_cat) |>
+  igraph::graph_from_data_frame()
+ggraph::ggraph(bigram_graph, layout = "fr") +
+  ggraph::geom_edge_link(ggplot2::aes(edge_alpha = n), show.legend = FALSE,
+                  end_cap = circle(.07, 'inches')) +
+  ggraph::geom_node_point(color = "lightblue", size = 3) +
+  ggraph::geom_node_text(ggplot2::aes(label = name), vjust = 1, hjust = 1, size = 2) +
+  ggplot2::theme_void()
+```
+
+Para profundizar en la relación entre estas palabras cooccurentes, nos centramos en palabras centrales como del diagrama anterior como lo fueron _"road"_, _"community"_, _"services"_ o _"water"_. Como se puede observar en el grafico @fig-correla, la palabra _road_ se relacionaba con más fuerza a las palabras _services_, _by-pass_ y _settlers_. Esto confirmaría la problemática descrita anteriormente por la cual las carreteras se ven bloqueadas por la falta de _by-passes_ y la presencia de colonos que dificultan el acceso a los servicios. Cuando observamos las correlaciones para las palabras _services_ observamos que correlación fuertemente con salud, pero también incluye a la educación, _schools_ y _students_, y se alude a la problemática de las carreteras y del transporte a los servicios. Cuando observamos las correlaciones para la palabra _health_ se observa la reciprocidad con la palabra _transportation_ que comparte con _services_ pero se añade la palabra _located_ y la palabra _100_, que hacen referencia a la problemática de la localización de los mismo y al tiempo que se tarda en llegar.
+
+Estos resultados, nos permiten redefinir una problemática concreta relacionada con riesgo de seguridad en el área Oslo C, por la cual la presencia de colonos y asentamiento israelís, sumado a las restricciones de movimiento y la falta de alternativas de _by-pass_, suponen una barrera para la poblacion palestina para acceder a servicios básicos como son la saludo -incluidos servicios primarios y de emergencia- y la educación. La localización de las localidades en el área Oslo C, y los deficientes transportes públicos, provocan tiempos de más de 100 minutos para acceder a estos servicios básicos, además de exponer a la poblacion palestina a enfrentamientos con los colonos israelíes.
+
+```{r}
+#| label: fig-correla
+#| fig-cap: "Coeficiente de Phi para fuerza la coocurrencia"
+cus_theme <- ggplot2::theme(
+    legend.position = "none",
+    axis.title.x = ggplot2::element_text(size = 8),
+    axis.text.x = ggplot2::element_text(size = 6),
+    axis.text.y = ggplot2::element_text(size = 6),
+    axis.title.y = ggplot2::element_text(size = 8),
+  )
+word_cors %>%
+  dplyr::filter(item1 %in% c("road", "health", "services")) %>%
+  dplyr::group_by(item1) %>%
+  dplyr::slice_max(correlation, n = 10) %>%
+  dplyr::ungroup() %>%
+  dplyr::mutate(item2 = reorder(item2, correlation)) %>%
+  ggplot2::ggplot(ggplot2::aes(item2, correlation, fill = item1)) +
+  ggplot2::geom_bar(stat = "identity") +
+  ggplot2::labs(y = "Correlación (phi)", x = "Palabras Coocurrentes") +
+  ggplot2::facet_wrap(~ item1, scales = "free") +
+  ggplot2::coord_flip() +
+  ggplot2::theme_minimal() +
+  cus_theme
+```
+
+

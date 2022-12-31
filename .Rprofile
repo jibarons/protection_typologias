@@ -1,0 +1,10 @@
+source("_import.R", echo = FALSE, verbose = FALSE)
+source("_indicators.r", echo = FALSE, verbose = FALSE)
+source("_miss_analysis.r", echo = FALSE, verbose = FALSE)
+source("_import.R", echo = FALSE, verbose = FALSE)
+source("_cleaning.r", echo = FALSE, verbose = FALSE)
+source("_indicators.r", echo = FALSE, verbose = FALSE)
+source("_mcorrespond.r", echo = FALSE, verbose = FALSE)
+source("_cluster.r", echo = FALSE, verbose = FALSE)
+source("_qualitative.r", echo = FALSE, verbose = FALSE)
+

@@ -1,0 +1,113 @@
+# Marco teórico
+
+Si bien el sector de la protección ha existido desde el inicio de la acción humanitaria moderna, su concepción como un sector transversal necesario para una asistencia integrada ha surgido solo en la última década, con la aparición de los conceptos de _Nexus_ y _Darable Solutions_. Hoy en día, aún existen carencia de literatura académica que provee de un corpus bibliográfico para elaborar una teoría solida con un marco conceptual que relación actividades principales y su interrelación con otros sectores de la acción humanitaria. Sectores como el de la reducción del riesgo de desastres [@oxley_conceptual_2005], la seguridad alimentaria [@wfp_food_2009], o más recientemente el del agua, saneamiento e higiene [@gensch_strengthening_2019] si mantienen marcos conceptuales y teóricos, sólidos y basados en décadas de literatura académica y evaluación de programas de acción humanitaria. Sin embargo, el sector de la protección solo ha empezado a recorrer este camino. Algunos estudios académicos, como el de @cachia_network_2020, surgen entorno a esta concepción moderna del sector de la protección iluminando como se puede medir y relacionar con su otros factores socioeconómicos y humanitarios, yendo más allá de la elaboración de marcos político y la argumentación filosófica.
+
+A pesar de todo, existen dos conceptos fuertemente arraigados en el marco de la protección integradas. Entorno a estos dos conceptos se ha desarrollado dos marcos teóricos principales que definen la protección integrada desde dos perspectivas: 1) el Riesgo de Protección; 2) la Seguridad y la Dignidad. Estos dos marcos teóricos permiten describir la problemática de la protección integrada como fenómeno multidimensional desde dos perspectivas complementarias. 
+
+## Riesgo de Protección
+El riesgo de protección queda definido por la Oficina de la Ayuda Humanitaria de la Comunidad Europea (ECHO) como “_riesgo de protección enfrentado por una población es directamente proporcional a las amenazas y las vulnerabilidades, e inversamente proporcional a las capacidades_” [@dg_echo_improving_2016, p. 10]. Se entiende así el riesgo como una interrelación entre factores internos y externos a la población afectada de reducen la protección del individuo. De esta definición se pueden extraer tres dimensiones del riesgo de protección:
+
+* Amenazas: se refiere acciones intencionadas perpetradas directa o indirecta ente por un actor o ente. Las amenazas pueden ser externas, perpetradas por grupos externos o los propios garantes de derechos o internas, perpetradas por la propia población afectada. Estas amenazas pueden tomar la forma de violencia, abuso, privación o negligencia
+* Vulnerabilidades: son las características de la población afectada que permiten hacer frente al impacto de las amenazas. Las vulnerabilidades son internas a la población afectada e incluye un abanico de factores como la localización o la identidad, el estatus social u otras características sociodemográficas, etc.
+* Capacidades: estas fortalecen la habilidad de la población afectada para hacer frente a las amenazas. Las capacidades pueden ser internas o externas a la población afectada, refiriéndose al conocimiento, la experiencia, las relaciones sociales, etc.
+
+Desde el contexto de Cisjordania, las amenazas corresponden a los riesgos de protección que derivan de acciones de la administración israelí respecto a la demolición, desahucio y expropiación de la propiedad y tierras palestinas, así como conflictos sociales que emergen entre los asentamientos de colonos israelíes y los pueblos palestinos. Las vulnerabilidades corresponderían a características de la población relacionadas con su estatus social, como por ejemplo su estatus de refugiados o desplazados u hogares encabezados por mujeres; así como las condiciones socioeconómicas relacionadas con el empleo, la educación y las condiciones de vida. Finalmente, entorno a las capacidades se relacionan cuestiones de acceso a recursos y remedios, cohesión social y aspectos culturales. La relación entre las tres categorías se expresa comúnmente con una fórmula matemática [@dg_echo_improving_2016], si bien esta solo expresa la dirección de la relación entre los conceptos y no una fórmula matemática aplicable como tal
+
+$$
+Riesgo = \frac{Amenzas * Vulnerabilidades} {Capacidades}
+$$
+
+## Seguridad y Dignidad
+
+El marco teórico de la seguridad y la dignidad desarrollado por @michelle_safety_2018 ofrece una perspectiva complementaria para profundizar en la protección integrada. Desde este marco teórico, se interpretan las condiciones de seguridad y dignidad a la que debe llegar el individuo en situación de protección integrada. Así, se consideran tres principios fundamentales para la interpretación del marco de la seguridad y la dignidad: 1) la seguridad es un aspecto fundamental y necesario para la dignidad, la dignidad no puede ser plena si no existe seguridad; 2) Sin embargo, la dignidad no es un determinante de la seguridad, si puede seguridad, sin que haya dignidad; 3) La seguridad y la dignidad, si bien son conceptos diferentes, representan una sola entidad que no debe ser interpretada de forma separada [@michelle_safety_2018]. Con todo, @michelle_safety_2018 estructura el marco en tres niveles: 1) las categorías, corresponde a los conceptos de orden superior, en este caso Seguridad y Dignidad; 2) las unidades de análisis, es el concepto operativo que articula el marco teórico con la practica en la acción humanitaria; 3) las características, es el nivel descriptivo que permite especificar los detalles de las unidades de análisis. 
+
+La dignidad se obtiene cuando existe 1) acceso relevante a los recursos y servicios; 2) La implementación de políticas y actividades es realizada de forma participativa por los actores responsable; 3) los individuos están empoderados para participar y realizar decisiones informadas en base a información fiable sobre el uso de recursos y la implementación de políticas y actividades. 
+
+Describiendo cada una de las unidades de análisis, el **acceso relevante** a los servicios se da cuando la gente conoce la existencia y localización de los servicios y puede acceder a estos tanto en la cantidad como en la calidad necesaria, de forma proporcionada a características como individuos [@michelle_safety_2018]. De esta forma no basta solo con la existencia del servicio o recurso, este debe ser conocido y accesible, no solo físicamente sino también provisto con la calidad necesaria para satisfacer la necesidad que pretende cubrir. Mas aun, este debe estar adaptado a las características particulares de la población que accede al mismo, provisto de forma proporcional a las necesidades distintivas de género, edad o estatus social, entre otras características relevantes. En Cisjordania, el acceso a recursos no es generalmente una cuestión de existencia de este: existen hospitales, escuelas, fuentes de agua potable, electricidad más o menos bien distribuidas en Cisjordania. Sin embargo, la calidad de las mismas se ve afectada por la restricción impuestas por Israel a la importación y exportación de productos en Cisjordania. A su vez, frecuentes puntos de control, israelíes dentro de Cisjordania, incursiones del ejército y los asentamientos de colonos, que restringen el acceso a carreteras enteras entorpecen la accesibilidad a estos recursos, si no la restringen por completo.
+
+La **provisión responsable** refiere la toma de responsabilidad por parte de los proveedores de servicios y gestores de recursos para actuar en consecuencia con acciones prácticas y los cambios en las políticas de implementación ante denuncias o retroalimentación realizadas por los usuarios. Asegurando que los servicios se proveen de forma culturalmente relevante y socialmente aceptable, y responde de forma efectiva a las necesidades de los usuarios [@michelle_safety_2018]. Ello implica la puesta en marcha de mecanismos de denuncia y retroalimentación seguros, sin discriminación, ni coerción que canalicen efectivamente la retroalimentación de los usuarios a los tomadores de decisión en la provisión directa e los servicios. La existencia de mecanismo de denuncia y retroalimentación se han expandido en la acción humanitaria en los últimos años como resultado de un cambio de paradigma en los donantes. Sin embargo, los servicios públicos presentan más limitaciones en cuanto a mecanismos de denuncia, pero sobre todo a la respuesta a esas denuncias. Mas aun, ciertos servicios provisto en Cisjordania por Israel, como gestor del recurso -e.g. la electricidad- no tiene en consideración los hábitos culturales de la población palestina.   
+
+La **participación y el empoderamiento** refiere que los individuos deben tener voz y voto para tomar decisiones informadas para mejorar sus condiciones de vida. Esto implica el acceso a información fiable y no manipulada, su participación no discriminada en los foros de toma de decisiones y su capacidad para la toma decisiones sin coerción y de forma segura [@michelle_safety_2018]. Si bien existen fuertes costumbres culturales en la sociedad palestina que definen el gobierno y los órganos de decisión, y que afectan a la plena participación de todos los segmentos de la población en la toma de decisiones -es el caso por ejemplo de la inclusión de las mujeres en estos órganos, especialmente los más tradicionales. Sin embargo, más allá de las cuestiones culturales, la sociedad palestina está totalmente excluida de decisiones que afectan directamente al gobierno de su territorio. Mas allá de las competencias de la autoridad palestina para fomentar esta participación, el área C, que implica la mayoría de territorio en Cisjordania, queda completamente fuera de control de la autoridad palestina. En el área Oslo B, si bienal autoridad palestina ejerce cierto control, este queda sujeto a la autoridad militar de Israel sobre esta área y a su discrecionalidad. 
+
+La seguridad se obtiene cuando en un territorio se garantiza: 1) la seguridad de los individuos en sus dimensiones físicas y psicológicas sin discriminación en base a su condición, características o conocimiento; 2) la seguridad ambiental cuando los individuos puede realizar sus actividades sin riesgo de amenazas.
+
+La **seguridad individual** refiere que la seguridad física, emocional, psicológica y espiritual de las personas no se discrimina por sus condiciones, actividades y características personales, sus conocimientos e información, y las condiciones y características de su hogar y de su vivienda [@michelle_safety_2018]. Las personas no son objetivos de actos discriminatorios o de violencia por sus características físicas, emocionales, espirituales o de estatus social. Dicha seguridad se ve vulnerada sistemáticamente en Cisjordania, donde las fuerzas israelíes discriminan sistemáticamente a la población palestina de la población judía. Así, en los conflictos entre colonos y palestinos, las fuerzas de seguridad israelí, la única que acude a los mismos, tomas rápidamente partido. De igual forma, los puntos de control establecidos por las fuerzas israelíes por todo Cisjordania no tratan de igual manera a ambos grupos, imponiendo mayor restricciones y severidad sobre la población palestina. 
+
+La **seguridad ambiental** es complementaria a la seguridad individual, e implica que las personas pueden realizar prácticas seguras física, emocional, psicológica y espiritualmente, fuera del hogar, en un área libre de amenazas deliberadas por parte de los perpetradores, tensiones o conflictos sociales, dentro de un entorno natural adecuado y con infraestructuras, normas de seguridad apropiadas y libertad y movimientos seguros [@michelle_safety_2018]. Como hemos referido los conflictos sociales en palestina son comunes. Los enfrentamientos entre colonos y las fuerzas de seguridad israelí, con los palestinos son frecuentes y desiguales.
+
+Se puede observar como las definiciones provistas para amenazas, vulnerabilidad y capacidades se integran también en el marco de la seguridad y dignidad (@fig-pr_sf). Así, las amenazas y las vulnerabilidades quedan integradas en la dimensión de la seguridad; las capacidades se asocian a la dimensión de dignidad.
+
+![Integración del marco del riesgo de protección y el de seguridad y dignidad (Michelle, 2018)](_data\\img\\michelle_pr_sf.png){#fig-pr_sf}
+
+El marco de la seguridad y la dignidad ha sido promovido en la acción humanitaria por parte de ECHO en respuesta a una concepción limitada y centrada en necesidades, para avanzar hacia un modelo integrado centrado en derechos [@dg_echo_improving_2016]. 
+
+## Problemáticas de protección
+En estos marcos teóricos, se pueden integrar las problemáticas más relevantes definidas por el @global_protection_cluster_protection_2022, encargado de coordinar los aspectos técnicos en la respuesta a las problemáticas de protección. Las problemáticas de protección definidas por el clúster señalan acciones o escenarios concretos que implican un riesgo de protección directo para los cuales la acción humanitaria debe dar respuesta. En concreto, el @global_protection_cluster_protection_2022 hace seguimiento a quince problemáticas de protección:
+
+* Violencia de genero
+* Restricciones a la Libertad de movimiento, desplazamientos forzados y asedios
+* Abuso psicológico o emocional y estrés infligido
+* Ataques sobre civiles y otras muertes extrajudiciales; y ataques sobre infraestructura civil
+* Robo, extorsión, desahucio y destrucción de la propiedad privada
+* Secuestro, desaparición forzada, detención o arresto arbitrario o ilegítimos
+* Barreras o restricciones en el acceso a documentación, remedios y justicia
+* Discriminación y estigmatización, negación de recursos, oportunidades y servicios
+* Presencia de minas y otros dispositivos explosivos
+* Matrimonio infantil o forzado
+* Reclutamiento forzado, incluyendo el reclutamiento de niños en grupos armados
+* Separación familiar o infantil forzada
+* Trabajos forzados, esclavitud y tráfico de personas
+* Desinformación y negación de acceso a la información
+* Tortura o trato inhumano, cruel o degradante
+
+No todas las problemáticas tienen la misma relevancia en los diferentes contextos, y no todas son evaluables pro los mismos métodos. Muchas de estas problemáticas son de carácter privado y muy sensitivo que no pueden ser evaluables con los métodos tradicionales de encuesta, por ejemplo, la violencia de género o la tortura. De ahí, que en general exista falta de información abierta sobre la prevalencia de estas problemáticas, y más aún la posibilidad de caracterizarlas con otros atributos complementarias, que permitan una investigación sobre las causas, consecuencias de estas. Mucha de esta información se obtiene a través de métodos cualitativos por medio de entrevistas individuales y grupos de discusión. De ahí la importancia de vincular datos cuantitativos con datos cualitativos.
+
+
+## Marco analítico la protección
+
+Entre los esfuerzos más recientes del _Global Protection Cluster_ para iluminar los estudios relacionados con la protección, se encuentra el llamado Marco Analítico de la Protección (PAF en inglés) desarrollado por @michele_protection_2021. El PAF se nutre de los conceptos anteriores para diseñar un proceso de análisis de información secundaria basado en la triangulación e interpretación de la misma. El PAF no se constituye como una herramienta o enfoque de recopilación de información, sino que promueve un esquema de clasificación y organización de información proveniente de múltiples fuentes. El objetivo consiste en definir el propósito del análisis y las necesidades de datos e información secundaria, apoyándose en la identificación de vacíos de información. Con ello, pretende informar la toma de decisiones sobre los enfoques, métodos y herramientas para adquirir datos e información adicionales necesarios para cumplir con el propósito del análisis. Así, el PAF admite el análisis de información a diferentes niveles geográficos, incluidos la comunidad, la región o el país, e incluso entre diferentes países. Las categorías que definen la información secundaria requerida deben de ser adaptadas según el contexto. 
+
+
+La estructura del PAF adapta la terminología y las definiciones de los marcos existentes para evitar la duplicación, garantizar interoperabilidad entre marcos, y fomentar el uso de datos e información existentes. El PAF tiene cinco componentes principales estructurados jerárquicamente: el pilar, el subpilar, la categoría y la pregunta analítica. Procedemos a describir los más relevantes siguiendo a @michele_protection_2021.
+
+Los pilares que se constituyen como la categoría más amplia del análisis para organizar los datos e informaciones recogidas bajo una dimensión esencial para análisis de protección. Son cuatro pilares de orden superior: 1) el contexto, o los factores y características específicas que están provocando la crisis y afectando sus dinámicas; 2) las amenazas sobre la población, que están actualmente activas y como afectan a grupos de población y áreas geográficas diferentes, incluyendo información que describa a los principales actores responsables de la amenaza y los factores que desencadenan la amenaza; 3) las consecuencias de las amenazas, implica identificar los grupos de población que son afectados por las amenazas, las características que los hacen vulnerables y las consecuencias diferenciadas por grupos de población y localización geográfica; y finalmente 4) las capacidades para afrontarlas, o los recursos que existen a nivel individual o local y que permiten mitigar las consecuencias o resolver las causas de la amenaza, incluyendo al nivel institucional e internacional a la amenaza.
+
+
+Para descomponer los pilares, los conceptos de orden superior que clasifican la información se plantean los subpilares. Existen tres subpilares para cada pilar, y permiten ir un paso más allá en la concreción y explicación de la problemática de protección.
+
+1. El primer pilar, **el contexto**, se plantean los siguientes subpilares:
+
+* Historia del conflicto: elementos histórico-contextuales que influyen en las amenazas existentes, así como la identificación de amenazas pasadas 
+
+* Contexto político y socioeconómico, destacando elementos contextuales políticos, económicos o sociales que pueden agravar las amenazas actuales
+
+* Contexto normativo y legal, incluye leyes y políticas informales o formales que o bien sienten las bases sobre las que se sostiene una amenaza, o bien contrarresten los efectos o las causas de la amenaza.
+
+2. Para el segundo pilar, **las amenazas actuales**, se plantean los siguientes subpilares:
+
+* Amenazas de protección, o el nivel de daño actual a la población, en forma de violencia,
+coerción o privación deliberada, que se eleva al nivel de una protección amenaza. Incluye información sobre si la amenaza es el resultado de un determinado comportamiento, organización/práctica grupal, o gobierno o no gobierno política o mecanismo.
+
+* Actores principales, reflejando la responsabilidad de los actores involucrados, incluyendo la identificación de grupos o personas que cometen directamente una acción lesiva, su afiliación y relación con las personas afectadas y el papel de los actores que tienen funciones específicas. 
+
+* Origen de las amenazas, incidiendo en los factores que generan la amenaza. Esto incluye las motivaciones principales de los principales actores responsables de la amenaza para cumplir -o negligir- con su responsabilidad de proteger.
+
+
+3. El tercer pilar de las **consecuencias de la amenaza**, incluye los subpilares de 
+
+* características de la población directamente afectada por la amenaza, haciendo énfasis en sus características de vulnerabilidad y cómo estas se relacionan con la amenaza
+
+* Consecuencias de la amenaza, entendiendo sus efectos primarios y secundarias para diferentes grupos de población y su distribución geográfica
+
+* Estrategias de afrontamiento, se refiere a respuestas positivas o negativas de la población afectada a las consecuencias de la amenaza. Incluyendo cómo influyen las percepciones sobre la amenaza a estas respuestas.
+
+
+4. Para le cuarto pilar, **las capacidades**, se incluyen los subpilares: 
+
+* Capacidades de la poblacion afectada para prevenir o resistir la amenaza y sus consecuencias, incluyendo las habilidades, conocimiento, redes sociales y otros elementos disponibles por las personas, hogares, familiar u otros grupos.
+
+* Mecanismos y actores locales, que implican tanto al individuo o grupo afectado como a las instituciones, organizaciones u otros actores locales para mitigar o responder a las amenazas y sus consecuencias. Esto incluye identificar el grado de que estas instituciones, sistemas, actores están funcionando y disponibles, de forma aceptable para la población.
+
+* Mecanismos y actores institucionales, se refiere a los actores que tienen el mandato institucional de proteger, y la capacidad de responsabilizar a los perpetradores de las amenazas por medio de mecanismos de rendición de cuentas.  Describe en general recursos y capacidades institucionales para proteger y responder, incluida la justicia y las instituciones de seguridad, informales mecanismos, así como nacionales y mecanismos internacionales de protección y respuestas
+
+Desde este trabajo no pretendemos abarcar la totalidad del PAF. Lejos de tal objetivo, proponemos un desarrollo metodológico que puede complementar al segundo y al tercer pilar del PAF, ofreciendo un análisis estructurado y sistemática para procesas parte de la información recogida en el PAF. De esta forma, propusimos una metodología que permita identificar los diferentes factores que componen el riesgo de protección y su importancia diferencial en un contexto determinado. Mas aun, que estos factores se pueden describir junto con las características de la población afectado, analizando su distribución territorial y su interrelación con otros factores contextuales.  
